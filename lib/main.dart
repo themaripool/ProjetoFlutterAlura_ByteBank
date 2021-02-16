@@ -120,13 +120,11 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
       body: ListView.builder(
         itemCount: widget._transferencias.length,
         itemBuilder: (context, index) {
-          print("aaaaa");
-          print('$widget._transferencias[index]');
-
           final Transferencia transferencia = widget._transferencias[index];
           return ItemTransferencia(transferencia);
         },
       ),
+      
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -136,8 +134,6 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
           }));
           future.then((transferenciaRecebida) {
             Future.delayed(Duration(seconds: 1), () {
-              debugPrint('chegou no then do future');
-              debugPrint('$transferenciaRecebida');
               if (transferenciaRecebida != null) {
                 setState(() {
                   widget._transferencias.add(transferenciaRecebida);
