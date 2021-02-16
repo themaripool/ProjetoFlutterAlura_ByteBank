@@ -18,10 +18,9 @@ class ByteBankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
-
-  final TextEditingController _controlladorCampoNumeroConta = TextEditingController();
+  final TextEditingController _controlladorCampoNumeroConta =
+      TextEditingController();
   final TextEditingController _controlladorCampoValor = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,27 +32,15 @@ class FormularioTransferencia extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextField(
-                controller: _controlladorCampoNumeroConta,
-                style: TextStyle(fontSize: 24.0),
-                decoration: InputDecoration(
-                  labelText: 'Número da conta',
-                  hintText: '0000',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-
-              TextField(
-                controller: _controlladorCampoValor,
-                style: TextStyle(fontSize: 24.0),
-                decoration: InputDecoration(
-                  icon: Icon(Icons.monetization_on),
+              Editor(
+                  controlador: _controlladorCampoNumeroConta,
+                  labelHint: '0000',
+                  labelText: 'Número da conta'),
+              Editor(
+                  controlador: _controlladorCampoValor,
+                  labelHint: '1000',
                   labelText: 'Valor',
-                  hintText: '0000',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-
+                  icone: Icons.monetization_on),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: RaisedButton(
@@ -61,22 +48,56 @@ class FormularioTransferencia extends StatelessWidget {
                   color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
-                    debugPrint('clicou no confirmar');
-                    final int numeroConta = int.tryParse(_controlladorCampoNumeroConta.text);
-                    final double valor = double.tryParse(_controlladorCampoValor.text);
-
-                    if (numeroConta != null && valor != null){
-                      final transferenciaCriada = Transferencia(valor, numeroConta);
-
-                      debugPrint(transferenciaCriada.toString());
-                    }
+                    _criaTransferencia(context);
                   },
                 ),
               )
-
             ],
           ),
         ));
+  }
+
+  void _criaTransferencia(BuildContext context) {
+    final int numeroConta =
+        int.tryParse(_controlladorCampoNumeroConta.text);
+    final double valor =
+        double.tryParse(_controlladorCampoValor.text);
+    
+    if (numeroConta != null && valor != null) {
+      final transferenciaCriada =
+          Transferencia(valor, numeroConta);
+    
+      Scaffold.of(context).showSnackBar(
+        //toast
+        SnackBar(
+          content: Text('$transferenciaCriada'),
+        ),
+      );
+    }
+  }
+}
+
+class Editor extends StatelessWidget {
+  final TextEditingController controlador;
+  final String labelText;
+  final String labelHint;
+  final IconData icone;
+
+  const Editor({Key key, this.controlador, this.labelText, this.labelHint, this.icone})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controlador,
+      style: TextStyle(fontSize: 24.0),
+      decoration: InputDecoration(
+        icon: icone != null ? Icon(icone) : null,
+        labelText: labelText,
+        hintText: labelHint,
+      ),
+      keyboardType: TextInputType.number,
+    );
   }
 }
 
@@ -121,8 +142,8 @@ class Transferencia {
   final int numeroConta;
   Transferencia(this.valor, this.numeroConta);
 
-  @override 
-  String toString(){
+  @override
+  String toString() {
     return 'Transferencia {valor: $valor, numeroConta: $numeroConta}';
   }
 }
