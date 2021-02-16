@@ -10,10 +10,16 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: ListaTransferencias(),
+      theme: ThemeData(
+        primaryColor: Colors.cyan[50],
+        accentColor: Colors.blueGrey[300],
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.blueGrey[300],
+          textTheme: ButtonTextTheme.primary
+        )
+
       ),
-    );
+      home: ListaTransferencias());
   }
 }
 
@@ -45,7 +51,6 @@ class FormularioTransferencia extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 16),
                 child: RaisedButton(
                   child: Text("Confirmar"),
-                  color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
                     _criaTransferencia(context);
